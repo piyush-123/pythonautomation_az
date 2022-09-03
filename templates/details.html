@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Detail Page</title>
+
+
+
+
+</head>
+
+<body>
+    <h2> Youtuber : {{name}}</h2>
+    <h3>Url  : {{url}}</h3>
+    <p>Number of likes are : {{likes}}</p>
+    <p>Number of comments  are : {{comment_num}}</p>
+    <p>Below are the details of comments : </p>
+
+   <table cellspacing="0">
+      <tr>
+         <th>Commenter</th>
+         <th>Comments</th>
+          <th>Replies</th>
+      </tr>
+         {% for review in reviews %}
+      <tr>
+          <td>{{review['Commenter Name']}}</td>
+         <td>{{review['Comments']}}</td>
+          <td>{{review['Reply_cnt']}}</td>
+
+
+      </tr>
+       {% endfor %}
+   </table>
+
+
+
+
+</body>
+
+</html>

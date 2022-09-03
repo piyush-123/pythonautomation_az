@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Review Page</title>
+
+
+
+
+</head>
+
+<body>
+
+    <h2> Latest Videos of {{name}} are shown below</h2>
+   <table cellspacing="0">
+      <tr>
+         <th>Video_URL</th>
+         <th>Video_Title</th>
+         <th>Video_Thumbnail</th>
+         <th> CLick on button for more description</th>
+      </tr>
+         {% for review in reviews %}
+      <tr>
+          <td>{{review['Video_URL']}}</td>
+         <td>{{review['Video_Title']}}</td>
+         <td>{{review['Video_Thumbnail']}}</td>
+
+
+          <td>
+          <form action ="/details" method="POST">
+            <input id = "video_dt" name="video_dt" type="hidden" value="{{review['Video_URL']}}">
+             <input id = "video_name" name="video_name" type="hidden" value="{{name}}">
+              <input id = "video_thumbnail" name="video_thumbnail" type="hidden" value="{{review['Video_Thumbnail']}}">
+            <input type="submit" name="b_dt" value="Click">
+          </form>
+          </td>
+      </tr>
+       {% endfor %}
+   </table>
+
+
+
+
+</body>
+
+</html>
