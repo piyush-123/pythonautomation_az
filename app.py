@@ -13,24 +13,24 @@ import pymongo
 import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://fjrviynkaqwkrr:cc28dd22119ff4818b4660ffcb2c422c15c39a72b89b5361a17deaf6dea13436@ec2-54-204-241-136.compute-1.amazonaws.com:5432/d360b6ar5bv5os'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://fjrviynkaqwkrr:cc28dd22119ff4818b4660ffcb2c422c15c39a72b89b5361a17deaf6dea13436@ec2-54-204-241-136.compute-1.amazonaws.com:5432/d360b6ar5bv5os'
 #app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#db = SQLAlchemy(app)
 
-class Youtube(db.Model):
-    __tablename__ = 'youtubers'
-    id = db.Column(db.Integer,primary_key=True)
-    name = db.Column(db.String(40))
-    video_url = db.Column(db.String(100))
-    video_likes = db.Column(db.String(50))
-    video_comments = db.Column(db.String(50))
+#class Youtube(db.Model):
+#    __tablename__ = 'youtubers'
+#    id = db.Column(db.Integer,primary_key=True)
+#    name = db.Column(db.String(40))
+#    video_url = db.Column(db.String(100))
+#    video_likes = db.Column(db.String(50))
+#    video_comments = db.Column(db.String(50))
 
-    def __init__(self,name,video_url,video_likes,video_comments):
-        self.name = name
-        self.video_url = video_url
-        self.video_likes = video_likes
-        self.video_comments = video_comments
+#    def __init__(self,name,video_url,video_likes,video_comments):
+#        self.name = name
+#        self.video_url = video_url
+#        self.video_likes = video_likes
+#        self.video_comments = video_comments
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
@@ -252,34 +252,34 @@ def detail_link():
                 reviews.append(
                     {"Commenter Name": commenter[i], "Comments": commenter_desc[i],"Reply_cnt":reply_num[i]})
             wd.close()
-            youtuber = Youtube(name,searchUrl,likes_result,comments_num)
-            db.session.add(youtuber)
-            db.session.commit()
-            client = pymongo.MongoClient(
-                "mongodb+srv://piyush1304:System909@cluster0.gocvn.mongodb.net/?retryWrites=true&w=majority")
+#            youtuber = Youtube(name,searchUrl,likes_result,comments_num)
+#            db.session.add(youtuber)
+#            db.session.commit()
+#            client = pymongo.MongoClient(
+#                "mongodb+srv://piyush1304:System909@cluster0.gocvn.mongodb.net/?retryWrites=true&w=majority")
 
-            db_mongo = client['webscrapping']
-            coll = db_mongo['youtubers']
-            final_comment_details = {}
-            for m in range(len(commenter)):
-
-                video_title = searchUrl
+#            db_mongo = client['webscrapping']
+#            coll = db_mongo['youtubers']
+#            final_comment_details = {}
+#            for m in range(len(commenter)):
+#
+#                video_title = searchUrl
                 #video_src = base64.b64encode(image_urls[m].encode('ascii'))
                 #for k in range(len(final_comments_name[m])):
-                video_commenter = commenter[m]
-                video_comment = commenter_desc[m]
-                video_comment_detail = {
-                        "commenter": video_commenter,
-                        "comments": video_comment
-                    }
-                final_comment_details[str(m)] = video_comment_detail
+#                video_commenter = commenter[m]
+#                video_comment = commenter_desc[m]
+#                video_comment_detail = {
+#                        "commenter": video_commenter,
+#                        "comments": video_comment
+#                    }
+#                final_comment_details[str(m)] = video_comment_detail
 
-            my_dict = {
-                    "Title": video_title,
-                    "Thumbnail" : base64.b64encode(thumbnail.encode('ascii')),
-                    "Comments": final_comment_details
-                }
-            coll.insert_one(my_dict)
+#            my_dict = {
+#                    "Title": video_title,
+#                    "Thumbnail" : base64.b64encode(thumbnail.encode('ascii')),
+#                    "Comments": final_comment_details
+#                }
+#            coll.insert_one(my_dict)
 
             return render_template('details.html',reviews=reviews,url=searchUrl,likes=likes_result,comment_num=comments_num,name=name)
         except Exception as e:
