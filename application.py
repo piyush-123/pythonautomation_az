@@ -7,12 +7,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import mysql.connector as connection
 import time
+from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 import base64
 import pymongo
 import os
 
-application = app = Flask(__name__)
+application =  Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://fjrviynkaqwkrr:cc28dd22119ff4818b4660ffcb2c422c15c39a72b89b5361a17deaf6dea13436@ec2-54-204-241-136.compute-1.amazonaws.com:5432/d360b6ar5bv5os'
 #app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -32,20 +33,22 @@ application = app = Flask(__name__)
 #        self.video_likes = video_likes
 #        self.video_comments = video_comments
 
-chrome_options = webdriver.ChromeOptions()
-chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("window-size=1400,900")
+options = Options()
+options.add_argument("--headless")
+options.add_argument("--disable-dev-shm-usage")
+options.binary_location = "/usr/local/bin/google-chrome"
+options.add_argument("--no-sandbox")
+options.add_argument("window-size=1400,900")
+options.add_argument("--disable-gpu")
+options.add_argument("--remote-debugging-port=9222")
 
 
-@app.route('/',methods=['GET'])
+@application.route('/',methods=['GET'])
 @cross_origin()
 def homepage():
     return render_template("index.html")
 
-@app.route('/analyse',methods=['POST','GET'])
+@application.route('/analyse',methods=['POST','GET'])
 @cross_origin()
 def analyse_link():
     if request.method == 'POST':
@@ -59,8 +62,10 @@ def analyse_link():
             count = 0
 
             name = searchUrl.split('/')[4]
-            wd = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"),chrome_options=chrome_options)
+            wd = webdriver.Chrome(executable_path="/usr/bin/chromedriver",options=options)
+            print('hereh')
             #wd = webdriver.Chrome(executable_path=Driver)
+            print("sytarted")
             wd.get(searchUrl)
             wd.maximize_window()
             time.sleep(1)
@@ -110,9 +115,9 @@ def analyse_link():
             return render_template('results.html',reviews=reviews[0:(len(reviews)-1)],name=name)
         except Exception as e:
             print(e)
-            return "error"
+            return "error again"
 
-@app.route('/details',methods=['POST'])
+@application.route('/details',methods=['POST'])
 @cross_origin()
 def detail_link():
     if request.method == 'POST':
@@ -127,7 +132,7 @@ def detail_link():
             commenter_desc=[]
             reply_num = []
 
-            wd = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+            wd = webdriver.Chrome(executable_path="/usr/bin/chromedriver",options=options)
             #wd = webdriver.Chrome(executable_path=Driver)
             wd.get(searchUrl)
             wd.maximize_window()
@@ -286,5 +291,5 @@ def detail_link():
             print(e)
             return "error in details"
 if __name__ == '__main__':
-    app.run()
+    application.run()
 
